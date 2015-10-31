@@ -777,6 +777,17 @@ static float edgeSizeFromCornerRadius(float cornerRadius) {
 
 - (void)dealloc
 {
+    if(viewController){
+        @try {
+            if ([viewController respondsToSelector:@selector(preferredContentSize)]) {
+                [viewController removeObserver:self forKeyPath:NSStringFromSelector(@selector(preferredContentSize))];
+            } else {
+                [viewController removeObserver:self forKeyPath:NSStringFromSelector(@selector(contentSizeForViewInPopover))];
+            }
+        }
+        @catch (NSException * __unused exception) {}
+    }
+    
     innerShadowColor = nil;
     innerStrokeColor = nil;
     gradientTopColor = nil;
